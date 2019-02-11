@@ -2,17 +2,61 @@
 <html lang="ja" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Hello Vue.js</title>
+    <title>Vue.js App</title>
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <div id="app">
-      <p>{{message}}</p>
-      <hr>
+    <hr>
+    <div id="app" v-cloak>
+      <h1>チュートリアルToDoリスト</h1>
+      <!-- <pre>{{ $data }}</pre> -->
       <!-- Here is start line -->
+      <label v-for="label in options">
+        <input type="radio" v-model="current" :value="label.value">
+        {{ label.label }}
+      </label>
+
+      ({{ computedTodos.length }} 件を表示)
+
+      <table>
+        <thead v-pre>
+          <tr>
+            <th class="id">ID</th>
+            <th class="comment">コメント</th>
+            <th class="state">状態</th>
+            <th class="button">-</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- ここに <tr> で Todo 要素を１行づつ繰り返し表示したい -->
+          <tr v-for="item in computedTodos"
+            :key="item.id"
+            :class="{done: item.state}">
+            <th>{{ item.id }}</th>
+            <td>{{ item.comment }}</td>
+            <td class="state">
+              <button @click="doChangeState(item)">
+                {{ labels[item.state] }}
+              </button>
+            </td>
+            <td class="button">
+              <button @click.alt="doRemove(item)">
+                削除
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p>※削除ボタンはALTキーを押しながらクリックして下さい</p>
+
+      <h2>新しい作業の追加</h2>
+      <form class="add-form" @submit.prevent="doAdd">
+        コメント <input type="text" ref="comment">
+        <button type="submit">追加</button>
+      </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
